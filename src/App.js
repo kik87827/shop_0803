@@ -27,7 +27,7 @@ function App() {
         <Container>
           <Row>
             {
-              shoes.map((item,index)=>{
+              shoes.map((item)=>{
                 return (
                   <ShoesCard senditem={item} key={item.id} />
                 )
