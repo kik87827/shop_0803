@@ -4,6 +4,8 @@ import { Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 import bgimg from './img/bg-1.png';
 import { useState } from 'react';
 import shoesData from './shoes'; 
+import { Routes, Route, Link } from 'react-router-dom';
+import DetailPage from './pages/DetailPage';
 
 function App() {
 
@@ -11,6 +13,7 @@ function App() {
 
   return (
     <div className="App">
+      
       {/* <Button variant="primary">Primary</Button> */}
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
@@ -22,20 +25,33 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-      <div className="main-bg" style={{backgroundImage : `url(${bgimg})`}}></div>
-      <div>
-        <Container>
-          <Row>
-            {
-              shoes.map((item)=>{
-                return (
-                  <ShoesCard senditem={item} key={item.id} />
-                )
-              })
-            }
-          </Row>
-        </Container>
-      </div>
+
+      <Link to="/">홈</Link>
+      <Link to="/detail">상세페이지</Link>
+
+      <Routes>
+        <Route path="/" element={
+          <>
+            <div className="main-bg" style={{backgroundImage : `url(${bgimg})`}}></div>
+            <div>
+              <Container>
+                <Row>
+                  {
+                    shoes.map((item)=>{
+                      return (
+                        <ShoesCard senditem={item} key={item.id} />
+                      )
+                    })
+                  }
+                </Row>
+              </Container>
+            </div>
+          </>
+        } />
+        <Route path="/detail" element={<DetailPage />} />
+        <Route path="/about" element={<div>어바웃페이지임</div>} />
+      </Routes>
+      
     </div>
   );
 }
