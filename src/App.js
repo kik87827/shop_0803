@@ -4,14 +4,14 @@ import { Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 import bgimg from './img/bg-1.png';
 import { useState } from 'react';
 import shoesData from './shoes'; 
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 import DetailPage from './pages/DetailPage';
 import AboutPage from './pages/AboutPage';
 import EventPage from './pages/EventPage';
 
 function App() {
 
-  let [shoes] = useState(shoesData);
+  let [shoes,setShoes] = useState(shoesData);
   let navigate = useNavigate();
 
   return (
@@ -28,21 +28,29 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-
+{/* 
       <Link to="/">홈</Link>
-      <Link to="/detail">상세페이지</Link>
+      <Link to="/detail">상세페이지</Link> */}
 
       <Routes>
         <Route path="/" element={
           <>
-            <div className="main-bg" style={{backgroundImage : `url(${bgimg})`}}></div>
+            <div className="main-bg" style={{ backgroundImage: `url(${bgimg})` }}></div>
+            
+            <div>
+              <button onClick={() => {
+                let copyItem = [...shoes];
+                let filterItem = copyItem.sort((objA, objB) => objA.title.localeCompare(objB.title));
+                setShoes(filterItem);
+              }}>가나다 정렬</button>
+            </div>
             <div>
               <Container>
                 <Row>
                   {
                     shoes.map((item)=>{
                       return (
-                        <ShoesCard senditem={item} key={item.id} />
+                        <ShoesCard senditem={item} key={item.id}  onClick={()=>{navigate('/detail/'+item.id)}} />
                       )
                     })
                   }
@@ -51,7 +59,7 @@ function App() {
             </div>
           </>
         } />
-        <Route path="/detail" element={<DetailPage />} />
+        <Route path="/detail/:urlid" element={<DetailPage shoes={shoes} />} />
         <Route path="/about" element={<AboutPage />}>
           <Route path="member" element={<div>멤버</div>} />
           <Route path="location" element={<div>위치</div>} />
