@@ -9,6 +9,7 @@ import DetailPage from './pages/DetailPage';
 import AboutPage from './pages/AboutPage';
 import EventPage from './pages/EventPage';
 import styled from 'styled-components';
+import axios from 'axios';
 
 let YellowBtn = styled.button`
   background : ${ props => props.bg || 'yellow' };
@@ -76,6 +77,18 @@ function App() {
                   }
                 </Row>
               </Container>
+              <div>
+                <button onClick={() => {
+                  axios.get('https://codingapple1.github.io/shop/data2.json').then((result) => {
+                    let moreData = result.data;
+                    let sumData = [...shoes, ...moreData];
+                    console.log(sumData);
+                    setShoes(sumData)
+                  }).catch(() => {
+                    console.log('실패함')
+                  })
+                  }}>더보기</button>
+              </div>
             </div>
           </>
         } />
@@ -101,7 +114,8 @@ function ShoesCard({ senditem, clickIndex, navigate  }) {
       <div onClick={() => {
         navigate('/detail/' + clickIndex);
       }}>
-        <img src={process.env.PUBLIC_URL + `/shoes${senditem.id+1}.jpg`} width="80%" alt="" />
+        {/*  <img src={process.env.PUBLIC_URL + `/shoes${senditem.id+1}.jpg`} width="80%" alt="" /> */}
+        <img src={`https://codingapple1.github.io/shop//shoes${senditem.id+1}.jpg`} width="80%" alt="" />
         <h4>{senditem.title}</h4>
         <p>{senditem.content}</p>
         <p>{senditem.price}원</p>
