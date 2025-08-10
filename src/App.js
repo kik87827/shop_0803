@@ -29,7 +29,9 @@ let Box = styled.div`
 function App() {
   let navigate = useNavigate();
 
-  let [shoes,setShoes] = useState(shoesData);
+  let [shoes, setShoes] = useState(shoesData);
+  let [loading, setLoading] = useState(false);
+  let [clickMore, SetClickMore] = useState(0);
 
   return (
     <div className="App">
@@ -77,17 +79,29 @@ function App() {
                   }
                 </Row>
               </Container>
+              {
+                loading ?  <div style={{textAlign : "center"}}><p>로딩중...</p></div> : null
+              }
+             
               <div>
                 <button onClick={() => {
-                  axios.get('https://codingapple1.github.io/shop/data2.json').then((result) => {
-                    let moreData = result.data;
-                    let sumData = [...shoes, ...moreData];
-                    console.log(sumData);
-                    setShoes(sumData)
-                  }).catch(() => {
-                    console.log('실패함')
+                  let getUrl;
+                  if (clickMore === 0) getUrl = 'https://codingapple1.github.io/shop/data2.json';
+                  else if (clickMore === 1) getUrl = 'https://codingapple1.github.io/shop/data3.json';
+                  else {
+                    console.log('더이상 불러올게 없음');
+                    setLoading(false);
+                    return;
+                  }
+                  setLoading(true);
+                  axios.get(getUrl).then((result) => {
+                    setShoes(prev => [...prev, ...result.data]);
+                    setLoading(false);
                   })
-                  }}>더보기</button>
+                    .catch(() => { console.log('실패함'); setLoading(false);  });
+                  
+                  SetClickMore(prev => prev + 1);
+                }}>더보기</button>
               </div>
             </div>
           </>
